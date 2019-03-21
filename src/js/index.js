@@ -1,6 +1,16 @@
-import str from './models/Search';
+import axios from 'axios'; // include the package
 
-// import {add, multiply, ID} from './views/searchView';
-import * as searchView from './views/searchView';
+async function getResults(query) {
+	const key = 'ffc8d69c30962a2817b4094b238c8924';
+	try {
+		const res = await axios(`https://www.food2fork.com/api/search?key=${key}&q=${query}`);
+		const rec = res.data.recipes;
+		console.log(rec);
+	} catch (error){
+		alert(error);
+  	}
+}
+getResults('pizza');
 
-console.log(`using imported fns! ${searchView.add(searchView.ID, 0)} and ${searchView.multiply(searchView.ID, 2)}. str: ${str}`);
+// api key: 
+// https://www.food2fork.com/api/search
