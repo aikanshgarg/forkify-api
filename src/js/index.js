@@ -1,6 +1,8 @@
 // CONTROLLER: all in one file
 
 import Search from './models/Search';
+import * as searchView from './views/searchView';
+import { elements } from './views/base';
 
 /** Global state of the app
 * - Search object
@@ -15,7 +17,7 @@ const state = {};
 // method for search form
 const controlSearch = async () => { // async function for getting recipes from API
 	// 1) get query from view
-	const query = 'pizza';
+	const query = searchView.getInput();
 
 	if (query) {
 		// 2) New search object and add it to state
@@ -33,7 +35,7 @@ const controlSearch = async () => { // async function for getting recipes from A
 }
 
 // addEventListener on search form
-document.querySelector('.search').addEventListener('submit', e => {
+elements.searchForm.addEventListener('submit', e => {
 	e.preventDefault();
 	controlSearch();
 })
