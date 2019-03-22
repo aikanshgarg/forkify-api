@@ -24,12 +24,15 @@ const controlSearch = async () => { // async function for getting recipes from A
 		state.search = new Search(query);
 
 		// 3) Prepare UI for results (loading spinner)
+		searchView.clearInput();
+		searchView.clearResults();
 
 		// 4) Seatch for recipes
 		await state.search.getResults(); // getResults is an async fn which returns a promise, thus, await the result
 
 		// 5) Render results on UI
-		console.log(state.search.result);
+		searchView.renderResult(state.search.result); // result is a property of every object of Search class
+
 	}
 
 }
