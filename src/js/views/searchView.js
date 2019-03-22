@@ -13,6 +13,22 @@ export const clearResults = () => {
 	elements.searchResList.innerHTML = '';
 };
 
+// method to shorten the name of recipes
+const limitRecipeTitle = (title, limit = 17) => {
+	const newTitle = [];
+	if (title.length > limit) {
+		title.split(' ').reduce((acc, cur) => {
+			if (acc + cur.length <= limit) {
+				newTitle.push(cur);
+			}
+			return acc + cur.length;
+		}, 0);
+
+		return `${newTitle.join(' ')} ...`;
+	}
+	return title;
+};
+
 // displaying a single recipe, using template string to write HTML markup
 const renderRecipe = recipe => {
 	const markup = `
