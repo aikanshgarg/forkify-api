@@ -13,7 +13,7 @@ export const clearResults = () => {
 	elements.searchResList.innerHTML = '';
 	elements.searchResPages.innerHTML = '';
 };
-/*----------------------------------------------------------------------------------title shortening----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------title shortening-----------------------------------------------------------------------*/
 // method to shorten the name of recipes
 const limitRecipeTitle = (title, limit = 17) => {
 	const newTitle = [];
@@ -29,7 +29,7 @@ const limitRecipeTitle = (title, limit = 17) => {
 	}
 	return title;
 };
-/*----------------------------------------------------------------------------rendering recipes on left-------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------rendering recipes on left------------------------------------------------------------------*/
 // displaying a single recipe, using template string to write HTML markup
 const renderRecipe = recipe => {
 	const markup = `
@@ -48,7 +48,7 @@ const renderRecipe = recipe => {
 
 	elements.searchResList.insertAdjacentHTML('beforeend', markup);
 };
-/*----------------------------------------------------------------- ----------------pagination ---------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------- ----------------pagination-----------------------------------------------------------------------------*/
 // type: 'prev' or 'next', page: current page
 const createButton = (page, type) => `
     <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page-1 : page+1}>
@@ -76,7 +76,7 @@ const renderButtons = (page, numResults, resPerPage) => {
 
 	elements.searchResPages.insertAdjacentHTML('afterbegin', button);
 };
-/*-------------------------------------------------------------slices the recipe array and passes to render functions-----------------------------------------------------------*/
+/*-------------------------------------------------------------slices the recipe array and passes to render functions------------------------------------------------------*/
 // displaying the recipes on UI
 export const renderResult = (recipes, page = 1, resPerPage = 10) => {
 	const start = (page - 1) * resPerPage;
@@ -87,4 +87,4 @@ export const renderResult = (recipes, page = 1, resPerPage = 10) => {
 	// render pagination buttons
 	renderButtons(page, recipes.length, resPerPage);
 };
-/*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/

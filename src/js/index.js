@@ -1,8 +1,13 @@
-// CONTROLLER: all in one file
+// CONTROLLERS: all in one file
+
+import { elements, renderLoader, clearLoader } from './views/base';
 
 import Search from './models/Search';
 import * as searchView from './views/searchView';
-import { elements, renderLoader, clearLoader } from './views/base';
+
+import Recipe from './models/Recipe';
+
+
 
 /** Global state of the app
 * - Search object
@@ -13,7 +18,7 @@ import { elements, renderLoader, clearLoader } from './views/base';
 
 const state = {};
 
-
+/********************************************************************************************************************************SEARCH CONTROLLER**************************/
 // method for search form
 const controlSearch = async () => { // async function for getting recipes from API
 	// 1) get query from view
@@ -37,7 +42,7 @@ const controlSearch = async () => { // async function for getting recipes from A
 
 	}
 
-}
+};
 
 // addEventListener on search form
 elements.searchForm.addEventListener('submit', e => {
@@ -55,3 +60,8 @@ elements.searchResPages.addEventListener('click', e => {
 	}
 });
 
+
+/********************************************************************************************************************************RECIPE CONTROLLER**************************/
+// const r = new Recipe(47746);
+// r.getRecipe();
+// console.log(r);
