@@ -2,7 +2,7 @@
 
 import Search from './models/Search';
 import * as searchView from './views/searchView';
-import { elements } from './views/base';
+import { elements, renderLoader, clearLoader } from './views/base';
 
 /** Global state of the app
 * - Search object
@@ -26,11 +26,13 @@ const controlSearch = async () => { // async function for getting recipes from A
 		// 3) Prepare UI for results (loading spinner)
 		searchView.clearInput();
 		searchView.clearResults();
+		renderLoader(elements.searchRes); // results is the parent passed to renderLoader fn
 
-		// 4) Seatch for recipes
+		// 4) Search for recipes
 		await state.search.getResults(); // getResults is an async fn which returns a promise, thus, await the result
 
 		// 5) Render results on UI
+		clearLoader(); // remove loader
 		searchView.renderResult(state.search.result); // result is a property of every object of Search class
 
 	}
