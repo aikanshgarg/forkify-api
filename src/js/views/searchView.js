@@ -11,8 +11,9 @@ export const clearInput = () => {
 // clear previous results
 export const clearResults = () => {
 	elements.searchResList.innerHTML = '';
+	elements.searchResPages.innerHTML = '';
 };
-
+/*----------------------------------------------------------------------------------title shortening----------------------------------------------------------------------------*/
 // method to shorten the name of recipes
 const limitRecipeTitle = (title, limit = 17) => {
 	const newTitle = [];
@@ -28,7 +29,7 @@ const limitRecipeTitle = (title, limit = 17) => {
 	}
 	return title;
 };
-
+/*----------------------------------------------------------------------------rendering recipes on left-------------------------------------------------------------------------*/
 // displaying a single recipe, using template string to write HTML markup
 const renderRecipe = recipe => {
 	const markup = `
@@ -47,7 +48,43 @@ const renderRecipe = recipe => {
 
 	elements.searchResList.insertAdjacentHTML('beforeend', markup);
 };
-// displaying the recipes on UI
-export const renderResult = recipes => {
-	recipes.forEach(renderRecipe);
+/*----------------------------------------------------------------- ----------------pagination ---------------------------------------------------------------------------------*/
+// type: 'prev' or 'next', page: current page
+const createButton = (page, type) => `
+    <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page-1 : page+1}>
+    <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
+        <svg class="search__icon">
+            <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
+        </svg>
+    </button>
+    `;
+// render pagination buttons when there is more than a single page
+const renderButtons = (page, numResults, resPerPage) => {
+	const pages = Math.ceil(numResults / resPerPage);
+
+	let button; 
+	if (page === 1 && pages > 1) { // only forward page button visible
+		button = createButton(page, 'next');
+	} else if (page === pages && pages > 1) { // only previous button on last page
+		button = createButton(page, 'prev');
+	} else if (page < pages) { // show both buttons
+		button = `
+			${createButton(page, 'prev')}
+			${createButton(page, 'next')}
+		`;
+	}
+
+	elements.searchResPages.insertAdjacentHTML('afterbegin', button);
 };
+/*-------------------------------------------------------------slices the recipe array and passes to render functions-----------------------------------------------------------*/
+// displaying the recipes on UI
+export const renderResult = (recipes, page = 1, resPerPage = 10) => {
+	const start = (page - 1) * resPerPage;
+	const end = page * resPerPage;
+	
+	recipes.slice(start, end).forEach(renderRecipe);
+
+	// render pagination buttons
+	renderButtons(page, recipes.length, resPerPage);
+};
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/

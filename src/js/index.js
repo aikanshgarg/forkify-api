@@ -43,5 +43,15 @@ const controlSearch = async () => { // async function for getting recipes from A
 elements.searchForm.addEventListener('submit', e => {
 	e.preventDefault();
 	controlSearch();
-})
+});
+
+// addEventListener on the pagination buttons
+elements.searchResPages.addEventListener('click', e => {
+	const btn = e.target.closest('.btn-inline');
+	if (btn) { // if btn is clicked, 
+		const goToPage = parseInt(btn.dataset.goto, 10);
+		searchView.clearResults();// clear previous list and its's buttons
+		searchView.renderResult(state.search.result, goToPage); // render newer list and buttons
+	}
+});
 
