@@ -33,12 +33,17 @@ const controlSearch = async () => { // async function for getting recipes from A
 		searchView.clearResults();
 		renderLoader(elements.searchRes); // results is the parent passed to renderLoader fn
 
-		// 4) Search for recipes
-		await state.search.getResults(); // getResults is an async fn which returns a promise, thus, await the result
+		try {			
+			// 4) Search for recipes (ajax call)
+			await state.search.getResults(); // getResults is an async fn which returns a promise, thus, await the result
 
-		// 5) Render results on UI
-		clearLoader(); // remove loader
-		searchView.renderResult(state.search.result); // result is a property of every object of Search class
+			// 5) Render results on UI
+			clearLoader(); // remove loader
+			searchView.renderResult(state.search.result); // result is a property of every object of Search class
+		} catch (error) {
+			alert('Error searching for recipes :(');
+			clearLoader(); 
+		}
 
 	}
 
@@ -61,7 +66,39 @@ elements.searchResPages.addEventListener('click', e => {
 });
 
 
-/********************************************************************************************************************************RECIPE CONTROLLER**************************/
-// const r = new Recipe(47746);
-// r.getRecipe();
-// console.log(r);
+/******************************************************************************************************************************RECIPE CONTROLLER***************************/
+const controlRecipe = async () => {
+	// 1) Get the ID from URL
+	const id = window.location.hash.replace('#',''); // replace method of string class, 
+	// URL => http://localhost:8080/#47746 [window.location- http://localhost:8080/][hash- #47746]
+	console.log(id);
+
+	if (id) {
+		// 2) Prepare UI for changes
+
+		// 3) Create new recipe object and add it to state
+		state.recipe = new Recipe(id);
+		
+		try {
+			// 4) Get recipe data (ajax call)
+			await state.recipe.getRecipe();
+
+			// 5) Calculate servings and time
+			state.recipe.calcTime();
+			state.recipe.calcServings();
+
+			// 6) Render recipe on UI
+			console.log(state.recipe);
+		} catch (error) {
+			alert('Error processing the recipe :(');
+		}
+		
+	}
+};
+
+
+/*// addEventListener on window object to get recipe ID
+window.addEventListener('hashchange', controlRecipe); // when hash(id) changes
+window.addEventListener('load', controlRecipe); // page is refreshed, or URL bookmarked and visited later*/
+// multiple event listeners attached to same event
+['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
