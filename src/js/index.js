@@ -24,6 +24,7 @@ const controlSearch = async () => { // async function for getting recipes from A
 	// 1) get query from view
 	const query = searchView.getInput();
 
+
 	if (query) {
 		// 2) New search object and add it to state
 		state.search = new Search(query);
@@ -41,12 +42,10 @@ const controlSearch = async () => { // async function for getting recipes from A
 			clearLoader(); // remove loader
 			searchView.renderResult(state.search.result); // result is a property of every object of Search class
 		} catch (error) {
-			alert('Error searching for recipes :(');
+			alert(error);
 			clearLoader(); 
 		}
-
 	}
-
 };
 
 // addEventListener on search form
@@ -86,11 +85,12 @@ const controlRecipe = async () => {
 			// 5) Calculate servings and time
 			state.recipe.calcTime();
 			state.recipe.calcServings();
+			state.recipe.parseIngredients();
 
 			// 6) Render recipe on UI
 			console.log(state.recipe);
 		} catch (error) {
-			alert('Error processing the recipe :(');
+			alert(error);
 		}
 		
 	}
