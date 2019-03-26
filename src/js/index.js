@@ -8,7 +8,7 @@ import * as searchView from './views/searchView';
 import Recipe from './models/Recipe';
 import * as recipeView from './views/recipeView';
 
-
+import List from './models/List';
 
 /** Global state of the app
 * - Search object
