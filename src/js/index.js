@@ -105,9 +105,22 @@ const controlRecipe = async () => {
 	}
 };
 
-
+/******************************************************************************************************************************EVENT LISTENERS***************************/
 /*// addEventListener on window object to get recipe ID
 window.addEventListener('hashchange', controlRecipe); // when hash(id) changes
 window.addEventListener('load', controlRecipe); // page is refreshed, or URL bookmarked and visited later*/
 // multiple event listeners attached to same event
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
+
+// addEventListener on recipe servings + - button
+elements.recipe.addEventListener('click', el => {
+	if (el.target.matches('.btn-decrease, .btn-decrease *')) {
+		if (state.recipe.servings > 1) {
+			state.recipe.updateServings('dec');
+			recipeView.updateServingsIngredients(state.recipe);	
+		} 
+	} else if (el.target.matches('.btn-increase, .btn-increase *')) {
+		state.recipe.updateServings('inc');
+		recipeView.updateServingsIngredients(state.recipe);
+	}
+});
