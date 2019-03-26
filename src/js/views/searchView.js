@@ -13,6 +13,17 @@ export const clearResults = () => {
 	elements.searchResList.innerHTML = '';
 	elements.searchResPages.innerHTML = '';
 };
+
+// highlight the selected list item
+export const highlightSelected = id => {
+	const resultsArr = Array.from(document.querySelectorAll('.results__link')); // male array of all list items and remove active class 
+	resultsArr.forEach(el => {
+		el.classList.remove('results__link--active');
+	});
+
+	document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+};
+
 /*----------------------------------------------------------------------------------title shortening-----------------------------------------------------------------------*/
 // method to shorten the name of recipes
 const limitRecipeTitle = (title, limit = 17) => {

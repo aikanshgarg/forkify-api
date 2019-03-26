@@ -6,6 +6,7 @@ import Search from './models/Search';
 import * as searchView from './views/searchView';
 
 import Recipe from './models/Recipe';
+import * as recipeView from './views/recipeView';
 
 
 
@@ -74,6 +75,12 @@ const controlRecipe = async () => {
 
 	if (id) {
 		// 2) Prepare UI for changes
+		recipeView.clearResults();
+		renderLoader(elements.recipe);
+
+		// Highlight the selected recipe
+		if (state.search) searchView.highlightSelected(id);	
+			
 
 		// 3) Create new recipe object and add it to state
 		state.recipe = new Recipe(id);
@@ -88,7 +95,9 @@ const controlRecipe = async () => {
 			state.recipe.parseIngredients();
 
 			// 6) Render recipe on UI
-			console.log(state.recipe);
+			clearLoader();
+			recipeView.renderRecipe(state.recipe);
+
 		} catch (error) {
 			alert(error);
 		}
