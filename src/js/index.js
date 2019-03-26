@@ -9,6 +9,7 @@ import Recipe from './models/Recipe';
 import * as recipeView from './views/recipeView';
 
 import List from './models/List';
+import * as listView from './views/listView';
 
 /** Global state of the app
 * - Search object
@@ -104,13 +105,51 @@ const controlRecipe = async () => {
 		
 	}
 };
+/********************************************************************************************************************************LIST CONTROLLER**************************/
 
-/******************************************************************************************************************************EVENT LISTENERS***************************/
+const controlList = () => {
+    // Create a new list IF there in none yet
+    if (!state.list) state.list = new List();
+
+    // Add each ingredient to the list and UI
+    state.recipe.ingredients.forEach(el => {
+        const item = state.list.addItem(el.count, el.unit, el.ingredient);
+        listView.renderItem(item);
+    });
+}
+
+
+/*********************************************************************************************************************************EVENT LISTENERS***************************/
 /*// addEventListener on window object to get recipe ID
 window.addEventListener('hashchange', controlRecipe); // when hash(id) changes
 window.addEventListener('load', controlRecipe); // page is refreshed, or URL bookmarked and visited later*/
 // multiple event listeners attached to same event
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
+
+
+
+
+// *_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_In the below two methods we added event listeners to entire divs as the actual objects are not rendered when the page loads
+
+// Handle delete and update list item events
+elements.shopping.addEventListener('click', e => {
+    const id = e.target.closest('.shopping__item').dataset.itemid;// wherever we click on the list item (count, unit, ing or delete icon), we will get the id of that item
+
+    // Handle the delete button
+    if (e.target.matches('.shopping__delete, .shopping__delete *')) {
+        // Delete from state
+        state.list.deleteItem(id);
+
+        // Delete from UI
+        listView.deleteItem(id);
+
+    // Handle the count update
+    } else if (e.target.matches('.shopping__count-value')) {
+        const val = parseFloat(e.target.value, 10);
+        state.list.updateCount(id, val);
+    }
+});
+
 
 // addEventListener on recipe servings + - button
 elements.recipe.addEventListener('click', el => {
@@ -122,5 +161,7 @@ elements.recipe.addEventListener('click', el => {
 	} else if (el.target.matches('.btn-increase, .btn-increase *')) {
 		state.recipe.updateServings('inc');
 		recipeView.updateServingsIngredients(state.recipe);
+	} else if (el.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
+		controlList();
 	}
 });
