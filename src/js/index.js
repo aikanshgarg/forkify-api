@@ -100,7 +100,7 @@ const controlRecipe = async () => {
 
 			// 6) Render recipe on UI
 			clearLoader();
-			recipeView.renderRecipe(state.recipe);
+			recipeView.renderRecipe(state.recipe, state.likes.isLiked(id));
 
 		} catch (error) {
 			alert(error);
@@ -122,6 +122,11 @@ const controlList = () => {
     });
 };
 
+
+
+
+state.likes = new Likes();
+likesView.toggleLikeMenu(state.likes.getNumLikes());
 /********************************************************************************************************************************LIKES CONTROLLER*************************/
 const controlLike = () => {
 	// Create a new likes array IF there in none yet
@@ -135,10 +140,10 @@ const controlLike = () => {
     	const newLike = state.likes.addLike(currentID, state.recipe.title, state.recipe.author, state.recipe.img);
 
     	// Toggle like button(UI)
-
+    	likesView.toggleLikeBtn(true);
     	
     	// Add likes lits(UI) 
-    	console.log(state.likes);
+    	likesView.renderLike(newLike);
 
    	// User has already liked the current recipe
     } else {
@@ -146,11 +151,13 @@ const controlLike = () => {
     	state.likes.deleteLike(currentID);
 
     	// Toggle like button(UI)
-
+    	likesView.toggleLikeBtn(false);
 
     	// Remove from likes list(UI)
-    	console.log(state.likes);
+    	likesView.deleteLike(currentID);
     }
+
+    likesView.toggleLikeMenu(state.likes.getNumLikes());
 
 };
 
