@@ -14,14 +14,15 @@ import * as listView from './views/listView';
 import Likes from './models/Likes';
 import * as likesView from './views/likesView';
 
-/** Global state of the app
-* - Search object
-* - Current recipe object
-* - Shopping list onject
-* - Liked recipes
-*/
+/****************** Global state of the app
+ - Search object
+ - Current recipe object
+ - Shopping list onject
+ - Liked recipes
+******************************************/
 
 const state = {};
+window.s = state; // TESTING PUPOSES
 
 /********************************************************************************************************************************SEARCH CONTROLLER**************************/
 // method for search form
@@ -124,9 +125,6 @@ const controlList = () => {
 
 
 
-
-state.likes = new Likes();
-likesView.toggleLikeMenu(state.likes.getNumLikes());
 /********************************************************************************************************************************LIKES CONTROLLER*************************/
 const controlLike = () => {
 	// Create a new likes array IF there in none yet
@@ -186,6 +184,23 @@ elements.shopping.addEventListener('click', e => {
         state.list.updateCount(id, val);
     }
 });
+
+
+// RESTORE THE LIKES ON PAGE LOAD (local storage)
+window.addEventListener('load', () => {
+	// creating a new empty object on page load
+	state.likes = new Likes();
+
+	// stroring local storage's data in this object
+	state.likes.readStorage();
+
+	// Toggle like-list icon
+	likesView.toggleLikeMenu(state.likes.getNumLikes());
+
+	// Render the existing likes
+	state.likes.likes.forEach(like => likesView.renderLike(like));
+})
+
 
 // addEventListener on recipe servings + - button, love symbol, add recipe button
 elements.recipe.addEventListener('click', el => {
