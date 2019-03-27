@@ -1,3 +1,8 @@
+console.log(`Try putting a new API key in config.js file and run the project, in case something doesn't work. This api has a daily limit of 50 calls...`);
+
+
+
+
 // CONTROLLERS: all in one file
 
 import { elements, renderLoader, clearLoader } from './views/base';
