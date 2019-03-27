@@ -11,6 +11,9 @@ import * as recipeView from './views/recipeView';
 import List from './models/List';
 import * as listView from './views/listView';
 
+import Likes from './models/Likes';
+import * as likesView from './views/likesView';
+
 /** Global state of the app
 * - Search object
 * - Current recipe object
@@ -105,8 +108,9 @@ const controlRecipe = async () => {
 		
 	}
 };
-/********************************************************************************************************************************LIST CONTROLLER**************************/
 
+
+/********************************************************************************************************************************LIST CONTROLLER**************************/
 const controlList = () => {
     // Create a new list IF there in none yet
     if (!state.list) state.list = new List();
@@ -116,18 +120,47 @@ const controlList = () => {
         const item = state.list.addItem(el.count, el.unit, el.ingredient);
         listView.renderItem(item);
     });
-}
+};
+
+/********************************************************************************************************************************LIKES CONTROLLER*************************/
+const controlLike = () => {
+	// Create a new likes array IF there in none yet
+    if (!state.likes) state.likes = new Likes();
+
+    const currentID = state.recipe.id;
+
+    // User has NOT yet liked current recipe
+    if (!state.likes.isLiked(currentID)) {
+    	// Add like to state
+    	const newLike = state.likes.addLike(currentID, state.recipe.title, state.recipe.author, state.recipe.img);
+
+    	// Toggle like button(UI)
+
+    	
+    	// Add likes lits(UI) 
+    	console.log(state.likes);
+
+   	// User has already liked the current recipe
+    } else {
+    	// Remove from state
+    	state.likes.deleteLike(currentID);
+
+    	// Toggle like button(UI)
 
 
-/*********************************************************************************************************************************EVENT LISTENERS***************************/
+    	// Remove from likes list(UI)
+    	console.log(state.likes);
+    }
+
+};
+
+
+/********************************************************************************************************************************EVENT LISTENERS***************************/
 /*// addEventListener on window object to get recipe ID
 window.addEventListener('hashchange', controlRecipe); // when hash(id) changes
 window.addEventListener('load', controlRecipe); // page is refreshed, or URL bookmarked and visited later*/
 // multiple event listeners attached to same event
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
-
-
-
 
 // *_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_In the below two methods we added event listeners to entire divs as the actual objects are not rendered when the page loads
 
@@ -139,19 +172,15 @@ elements.shopping.addEventListener('click', e => {
     if (e.target.matches('.shopping__delete, .shopping__delete *')) {
         // Delete from state
         state.list.deleteItem(id);
-
-        // Delete from UI
+	    // Delete from UI
         listView.deleteItem(id);
-
-    // Handle the count update
-    } else if (e.target.matches('.shopping__count-value')) {
+    } else if (e.target.matches('.shopping__count-value')) {// Handle the count update
         const val = parseFloat(e.target.value, 10);
         state.list.updateCount(id, val);
     }
 });
 
-
-// addEventListener on recipe servings + - button
+// addEventListener on recipe servings + - button, love symbol, add recipe button
 elements.recipe.addEventListener('click', el => {
 	if (el.target.matches('.btn-decrease, .btn-decrease *')) {
 		if (state.recipe.servings > 1) {
@@ -163,5 +192,8 @@ elements.recipe.addEventListener('click', el => {
 		recipeView.updateServingsIngredients(state.recipe);
 	} else if (el.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
 		controlList();
+	} else if (el.target.matches('.recipe__love, .recipe__love *')) {
+		// Like controller 
+		controlLike();
 	}
 });
